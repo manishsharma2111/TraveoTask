@@ -1,0 +1,55 @@
+import React, { Component } from "react";
+import { Animated, View, StyleSheet, ScrollView } from "react-native";
+
+import Card from "../components/Card";
+
+import { travelData } from "../data";
+
+export default class Carousal extends Component {
+  animVal = new Animated.Value(0);
+
+  render() {
+    let componentArray = [];
+
+    travelData.map((data, index) => {
+      const thisComponent = (
+        <Card
+          key={index}
+          item={data}
+          width={this.props.width}
+          height={this.props.height}
+        />
+      );
+      componentArray.push(thisComponent);
+    });
+
+    return (
+      <View
+        style={[
+          styles.container,
+          { width: this.props.width, height: this.props.height }
+        ]}
+        flex={1}
+      >
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          scrollEventThrottle={10}
+          pagingEnabled
+          onScroll={Animated.event([
+            { nativeEvent: { contentOffset: { x: this.animVal } } }
+          ])}
+        >
+          {componentArray}
+        </ScrollView>
+      </View>
+    );
+  }
+}
+
+const styles = StyleSheet.create({
+  container: {
+    alignItems: "center",
+    justifyContent: "center"
+  }
+});
